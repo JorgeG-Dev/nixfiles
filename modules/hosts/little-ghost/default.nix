@@ -6,7 +6,6 @@
       little-ghost
       core
       desktop
-      gaming
       dev
       terminal
     ];
