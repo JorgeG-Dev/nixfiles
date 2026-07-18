@@ -8,7 +8,6 @@
       desktop
       dev
       terminal
-      inputs.preservation.nixosModules.default
       inputs.disko.nixosModules.disko
       inputs.self.diskoConfigurations.little-ghost
     ];
