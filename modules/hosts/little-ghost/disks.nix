@@ -104,6 +104,7 @@
           "/var/lib/systemd/coredump"
           "/var/log"
           "/etc/NetworkManager/system-connections"
+          "/etc/nixos"
           "/tmp"
         ];
 
