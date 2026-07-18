@@ -87,6 +87,7 @@
           "/var/lib/docker"
           "/var/log"
           "/etc/NetworkManager/system-connections"
+          "/etc/ssh"
           "/tmp"
         ];
 
