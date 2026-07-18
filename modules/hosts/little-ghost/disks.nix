@@ -104,7 +104,6 @@
           "/var/lib/systemd/coredump"
           "/var/log"
           "/etc/NetworkManager/system-connections"
-          "/etc/ssh/ssh_host_*"
           "/tmp"
         ];
 
