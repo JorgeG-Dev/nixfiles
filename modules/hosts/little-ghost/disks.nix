@@ -65,6 +65,9 @@
   };
 
   flake.modules.nixos.little-ghost = {
+    # Declare the hashed password here since we don't necessarily need a hashed
+    # password on each system, only those where preservation is a thing
+    users.users.${config.flake.aspects.owner.username}.hashedPasswordFile = "/persistent/passwd";
     preservation = {
       enable = true;
       preserveAt."/persistent" = {
