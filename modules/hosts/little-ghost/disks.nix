@@ -113,7 +113,7 @@
             ".zsh_history"
           ];
           directories = [
-            "projects"
+            "Projects"
             "Documents"
             "Pictures"
             "Downloads"
