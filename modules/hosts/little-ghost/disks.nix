@@ -105,7 +105,6 @@
           "/var/log"
           "/etc/NetworkManager/system-connections"
           "/etc/nixos"
-          "/tmp"
         ];
 
         users.${config.flake.aspects.owner.username} = {
