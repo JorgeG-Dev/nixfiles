@@ -76,6 +76,22 @@
             file = "/etc/machine-id";
             inInitrd = true;
           }
+          {
+            file = "/etc/ssh/ssh_host_rsa_key";
+            how = "symlink";
+            configureParent = true;
+          }
+          {
+            file = "/etc/ssh/ssh_host_ed25519_key";
+            how = "symlink";
+            configureParent = true;
+          }
+          {
+            file = "/var/lib/systemd/random-seed";
+            how = "symlink";
+            inInitrd = true;
+            configureParent = true;
+          }
         ];
 
         directories = [
@@ -85,14 +101,17 @@
             inInitrd = true;
           }
           "/var/lib/docker"
+          "/var/lib/systemd/coredump"
           "/var/log"
           "/etc/NetworkManager/system-connections"
-          "/etc/ssh"
+          "/etc/ssh/ssh_host_*"
           "/tmp"
         ];
 
         users.${config.flake.aspects.owner.username} = {
-          files = [ ];
+          files = [
+            ".zsh_history"
+          ];
           directories = [
             "projects"
             "Documents"
@@ -100,7 +119,11 @@
             "Downloads"
             ".local/state/wireplumber"
             ".local/state/nvim"
-            ".ssh"
+            ".local/state/nix"
+            {
+              directory = ".ssh";
+              mode = "0700";
+            }
             ".mozilla"
           ];
         };
