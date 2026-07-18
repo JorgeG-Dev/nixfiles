@@ -9,6 +9,7 @@
       gaming
       dev
       terminal
+      inputs.preservation.nixosModules.default
     ];
   };
 }
