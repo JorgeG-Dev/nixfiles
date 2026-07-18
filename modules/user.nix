@@ -9,7 +9,7 @@
     nixos.core = {
       users.users.${config.flake.aspects.owner.username} = {
         isNormalUser = true;
-        initialPassword = "12345";
+        initialPassword = "changeme";
         extraGroups = [
           "wheel"
           "networkmanager"
