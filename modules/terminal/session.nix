@@ -56,7 +56,7 @@
       ];
     };
 
-  flake.modules.darwin.dev =
+  flake.modules.darwin.terminal =
     { pkgs, ... }:
     {
       imports = [ self.wrappers.tmux.install ];
