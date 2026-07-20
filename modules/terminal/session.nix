@@ -7,16 +7,14 @@
   ...
 }:
 {
-  flake.modules.homeManager.terminal = { pkgs, ... }: {
-    programs.tmux = {
-      enable = true;
-      clock24 = true;
-      plugins = with pkgs.tmuxPlugins; [
-        yank
+  flake.wrappers.tmux =
+    { pkgs, wlib, ... }:
+    {
+      imports = [ wlib.wrapperModules.tmux ];
+      plugins = with pkgs; [
         {
-          plugin = catppuccin;
-          extraConfig = ''
-
+          plugin = tmuxPlugins.catppuccin;
+          configAfter = ''
             # Configure the catppuccin plugin
             set -g @catppuccin_flavor "mocha"
             set -g @catppuccin_window_status_style "rounded"
@@ -34,18 +32,36 @@
           '';
         }
       ];
-      extraConfig = ''
-        set -g mouse on
-        set -g prefix C-s
-        set -g status-position top
-        set -sg escape-time 10
-
+      mouse = true;
+      clock24 = true;
+      escapeTime = 10;
+      prefix = "C-s";
+      configAfter = ''
         # vim bindings
         bind-key h select-pane -L
         bind-key j select-pane -D
         bind-key k select-pane -U
         bind-key l select-pane -R
+        set -g status-position top
       '';
+
     };
-  };
+
+  flake.modules.nixos.terminal =
+    { pkgs, ... }:
+    {
+      imports = [ self.wrappers.tmux.install ];
+      wrappers.tmux.enable = true;
+      environment.systemPackages = with pkgs; [
+      ];
+    };
+
+  flake.modules.darwin.dev =
+    { pkgs, ... }:
+    {
+      imports = [ self.wrappers.tmux.install ];
+      wrappers.tmux.enable = true;
+      environment.systemPackages = with pkgs; [
+      ];
+    };
 }
