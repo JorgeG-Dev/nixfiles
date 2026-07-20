@@ -16,11 +16,16 @@
         "uas"
         "sd_mod"
       ];
+      environment.systemPackages = with pkgs; [
+        sbctl
+      ];
       boot.initrd.kernelModules = [ ];
       boot.kernelModules = [ "kvm-amd" ];
       boot.extraModulePackages = [ ];
       boot.kernelPackages = pkgs.linuxPackages_latest;
-      boot.loader.systemd-boot.enable = true;
+      boot.loader.systemd-boot.enable = false;
+      boot.loader.limine.enable = true;
+      boot.loader.limine.secureBoot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
     };
 }
