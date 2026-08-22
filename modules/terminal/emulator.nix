@@ -12,7 +12,7 @@
   flake.modules.homeManager.terminal = { pkgs, ... }: {
     programs.ghostty = {
       enable = true;
-      package = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
+      package = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
       enableZshIntegration = true;
       settings = {
         font-family = config.flake.aspects.fonts.mono;

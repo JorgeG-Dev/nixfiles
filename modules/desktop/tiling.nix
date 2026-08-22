@@ -12,8 +12,8 @@
     {
       wrappers.control_type = "exclude";
       wrappers.packages = {
-        noctalia = !pkgs.stdenv.isLinux;
-        niri = !pkgs.stdenv.isLinux;
+        noctalia = !pkgs.stdenv.hostPlatform.isLinux;
+        niri = !pkgs.stdenv.hostPlatform.isLinux;
       };
 
     };
@@ -95,6 +95,7 @@
         enable = true;
         package = niriWithMonitors.wrap { inherit pkgs; };
       };
+      services.displayManager.defaultSession = lib.mkForce "niri";
     };
 
 }
