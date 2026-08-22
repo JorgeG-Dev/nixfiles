@@ -8,6 +8,7 @@
       "pipe-operators"
     ];
     system.stateVersion = "25.11";
+    programs.nix-ld.enable = true;
   };
   flake.modules.darwin.core = {
     nix.enable = false;
