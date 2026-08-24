@@ -11,6 +11,7 @@
     programs.nix-ld.enable = true;
   };
   flake.modules.darwin.core = {
+    nixpkgs.config.allowUnfree = true;
     nix.enable = false;
     nix.settings = {
       experimental-features = [
