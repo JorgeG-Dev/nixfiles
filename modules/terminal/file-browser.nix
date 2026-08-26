@@ -6,6 +6,12 @@
   wlib,
   ...
 }:
+let
+  yaziModule = {
+    imports = [ self.wrappers.yazi.install ];
+    wrappers.yazi.enable = true;
+  };
+in
 {
   flake.wrappers.yazi =
     { pkgs, wlib, ... }:
@@ -21,17 +27,6 @@
       };
     };
 
-  flake.modules.nixos.terminal =
-    { pkgs, ... }:
-    {
-      imports = [ self.wrappers.yazi.install ];
-      wrappers.yazi.enable = true;
-    };
-
-  flake.modules.darwin.terminal =
-    { pkgs, ... }:
-    {
-      imports = [ self.wrappers.yazi.install ];
-      wrappers.yazi.enable = true;
-    };
+  flake.modules.nixos.terminal = yaziModule;
+  flake.modules.darwin.terminal = yaziModule;
 }

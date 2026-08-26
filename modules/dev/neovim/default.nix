@@ -6,6 +6,12 @@
   wlib,
   ...
 }:
+let
+  neovimModule = {
+    imports = [ self.wrappers.neovim.install ];
+    wrappers.neovim.enable = true;
+  };
+in
 {
   flake.wrappers.neovim =
     { pkgs, wlib, ... }:
@@ -57,17 +63,6 @@
       };
     };
 
-  flake.modules.nixos.dev =
-    { pkgs, ... }:
-    {
-      imports = [ self.wrappers.neovim.install ];
-      wrappers.neovim.enable = true;
-    };
-
-  flake.modules.darwin.dev =
-    { pkgs, ... }:
-    {
-      imports = [ self.wrappers.neovim.install ];
-      wrappers.neovim.enable = true;
-    };
+  flake.modules.nixos.dev = neovimModule;
+  flake.modules.darwin.dev = neovimModule;
 }

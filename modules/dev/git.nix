@@ -6,6 +6,18 @@
   wlib,
   ...
 }:
+let
+  gitModule =
+    { pkgs, ... }:
+    {
+      imports = [ self.wrappers.git.install ];
+      wrappers.git.enable = true;
+      environment.systemPackages = with pkgs; [
+        lazygit
+        git-filter-repo
+      ];
+    };
+in
 {
   flake.wrappers.git =
     { pkgs, wlib, ... }:
@@ -19,25 +31,6 @@
       };
     };
 
-  flake.modules.nixos.dev =
-    { pkgs, ... }:
-    {
-      imports = [ self.wrappers.git.install ];
-      wrappers.git.enable = true;
-      environment.systemPackages = with pkgs; [
-        lazygit
-        git-filter-repo
-      ];
-    };
-
-  flake.modules.darwin.dev =
-    { pkgs, ... }:
-    {
-      imports = [ self.wrappers.git.install ];
-      wrappers.git.enable = true;
-      environment.systemPackages = with pkgs; [
-        lazygit
-        git-filter-repo
-      ];
-    };
+  flake.modules.nixos.dev = gitModule;
+  flake.modules.darwin.dev = gitModule;
 }
