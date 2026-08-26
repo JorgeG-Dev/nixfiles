@@ -15,6 +15,7 @@ let
       environment.systemPackages = with pkgs; [
         lazygit
         git-filter-repo
+        gh
       ];
     };
 in
