@@ -5,6 +5,11 @@
   config,
   ...
 }:
+let
+  # Bound at the flake-parts level so the home-manager module below can take its
+  # own `config` argument without losing access to the aspect.
+  wallpapers = config.flake.aspects.wallpapers;
+in
 {
   # Need to limit what gets built based on system type
   perSystem =
@@ -12,17 +17,8 @@
     {
       wrappers.control_type = "exclude";
       wrappers.packages = {
-        noctalia = !pkgs.stdenv.hostPlatform.isLinux;
         niri = !pkgs.stdenv.hostPlatform.isLinux;
       };
-
-    };
-
-  flake.wrappers.noctalia =
-    { pkgs, wlib, ... }:
-    {
-      imports = [ wlib.wrapperModules.noctalia-shell ];
-      settings = (builtins.fromJSON (builtins.readFile ./noctalia.json)).settings;
     };
 
   flake.wrappers.niri =
@@ -31,11 +27,9 @@
       # By adding the custom noctalia wrapper as an extra package, we ensure
       # niri can access it on the PATH
       runtimePkgs = [
-        (self.wrappers.noctalia.wrap { inherit pkgs; })
         pkgs.xwayland-satellite
       ];
       imports = [ wlib.wrapperModules.niri ];
-      v2-settings = true;
       settings = {
         xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
         binds = {
@@ -53,10 +47,11 @@
           "Super+Shift+F".fullscreen-window = _: { };
           "Super+BracketLeft".consume-or-expel-window-left = _: { };
           "Super+BracketRight".consume-or-expel-window-right = _: { };
-          "Super+Space".spawn-sh = "noctalia-shell ipc call launcher toggle";
+          "Super+Space".spawn-sh = "noctalia msg panel-toggle launcher";
+          "Super+S".spawn-sh = "noctalia msg panel-toggle control-center";
         };
         input.keyboard.xkb.layout = "us";
-        spawn-at-startup = [ "noctalia-shell" ];
+        spawn-at-startup = [ "noctalia" ];
         layout = {
           default-column-width = {
             proportion = 0.5;
@@ -65,10 +60,48 @@
         hotkey-overlay = {
           skip-at-startup = _: { };
         };
-
         window-rules = [
-          { draw-border-with-background = false; }
+          {
+            geometry-corner-radius = 20;
+            clip-to-geometry = true;
+            draw-border-with-background = false;
+          }
         ];
+      };
+    };
+
+  flake.modules.homeManager.desktop =
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
+    {
+      programs.noctalia = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+        enable = true;
+        settings = {
+          theme = {
+            mode = "dark";
+          };
+          wallpaper = {
+            enabled = true;
+            # TODO: Figure out how to set this value based on monitor type
+            directory = "${config.home.homeDirectory}/${wallpapers.ultrawide}";
+            fill_mode = "crop";
+            transition_duration = 1500;
+            transition_on_startup = true;
+            automation = {
+              enabled = true;
+              interval_seconds = 60;
+              order = "random";
+              recursive = true;
+            };
+          };
+          shell = {
+            polkit_agent = true;
+          };
+        };
       };
     };
 
@@ -90,12 +123,15 @@
       };
     in
     {
-
       programs.niri = {
         enable = true;
         package = niriWithMonitors.wrap { inherit pkgs; };
       };
       services.displayManager.defaultSession = lib.mkForce "niri";
+      services.displayManager.noctalia-greeter = {
+        enable = true;
+      };
+      # TODO: Wait for noctalia-greeter module to be updated to enable the auto-sync feature
+      # Doing it manually is a bit janky.
     };
-
 }
