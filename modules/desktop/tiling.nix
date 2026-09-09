@@ -9,6 +9,7 @@ let
   # Bound at the flake-parts level so the home-manager module below can take its
   # own `config` argument without losing access to the aspect.
   wallpapers = config.flake.aspects.wallpapers;
+  owner = config.flake.aspects.owner.username;
 in
 {
   # Need to limit what gets built based on system type
@@ -24,8 +25,10 @@ in
   flake.wrappers.niri =
     { pkgs, wlib, ... }:
     {
-      # By adding the custom noctalia wrapper as an extra package, we ensure
-      # niri can access it on the PATH
+      # Puts xwayland-satellite on niri's runtime PATH. The absolute store path
+      # is also pinned in settings below; this covers anything that shells out
+      # to it by name. noctalia reaches the PATH on its own, via home.packages
+      # from the home-manager module.
       runtimePkgs = [
         pkgs.xwayland-satellite
       ];
@@ -70,41 +73,6 @@ in
       };
     };
 
-  flake.modules.homeManager.desktop =
-    {
-      pkgs,
-      lib,
-      config,
-      ...
-    }:
-    {
-      programs.noctalia = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-        enable = true;
-        settings = {
-          theme = {
-            mode = "dark";
-          };
-          wallpaper = {
-            enabled = true;
-            # TODO: Figure out how to set this value based on monitor type
-            directory = "${config.home.homeDirectory}/${wallpapers.ultrawide}";
-            fill_mode = "crop";
-            transition_duration = 1500;
-            transition_on_startup = true;
-            automation = {
-              enabled = true;
-              interval_seconds = 60;
-              order = "random";
-              recursive = true;
-            };
-          };
-          shell = {
-            polkit_agent = true;
-          };
-        };
-      };
-    };
-
   flake.modules.nixos.desktop =
     {
       pkgs,
@@ -133,5 +101,39 @@ in
       };
       # TODO: Wait for noctalia-greeter module to be updated to enable the auto-sync feature
       # Doing it manually is a bit janky.
+
+      # programs.noctalia is a Linux-only home-manager module, so it lives here
+      # instead of in homeManager.desktop -- that aspect is imported on darwin
+      # too, which would need a platform guard to stay evaluable.
+      home-manager.users.${owner} =
+        # `config` here is the home-manager config, not the NixOS one above
+        { config, ... }:
+        {
+          programs.noctalia = {
+            enable = true;
+            settings = {
+              theme = {
+                mode = "dark";
+              };
+              wallpaper = {
+                enabled = true;
+                # TODO: Figure out how to set this value based on monitor type
+                directory = "${config.home.homeDirectory}/${wallpapers.ultrawide}";
+                fill_mode = "crop";
+                transition_duration = 1500;
+                transition_on_startup = true;
+                automation = {
+                  enabled = true;
+                  interval_seconds = 60;
+                  order = "random";
+                  recursive = true;
+                };
+              };
+              shell = {
+                polkit_agent = true;
+              };
+            };
+          };
+        };
     };
 }
