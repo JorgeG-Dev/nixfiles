@@ -1,11 +1,4 @@
-{
-  self,
-  inputs,
-  config,
-  pkgs,
-  wlib,
-  ...
-}:
+{ self, ... }:
 let
   neovimModule = {
     imports = [ self.wrappers.neovim.install ];

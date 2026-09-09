@@ -1,10 +1,10 @@
-{ inputs, config, ... }:
+{ ... }:
+let
+  timeModule = {
+    time.timeZone = "America/New_York";
+  };
+in
 {
-  flake.modules.nixos.core = {
-    time.timeZone = "America/New_York";
-  };
-
-  flake.modules.darwin.core = {
-    time.timeZone = "America/New_York";
-  };
+  flake.modules.nixos.core = timeModule;
+  flake.modules.darwin.core = timeModule;
 }

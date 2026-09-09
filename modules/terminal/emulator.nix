@@ -1,11 +1,4 @@
-{
-  self,
-  inputs,
-  config,
-  pkgs,
-  wlib,
-  ...
-}:
+{ config, ... }:
 {
   flake.aspects.terminal.emulator = "ghostty";
 

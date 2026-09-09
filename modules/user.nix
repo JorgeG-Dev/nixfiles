@@ -1,9 +1,4 @@
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ inputs, config, ... }:
 {
   flake.modules = {
     nixos.core = {
@@ -22,7 +17,6 @@
         systemd.user.startServices = "sd-switch";
         imports = [
           inputs.self.modules.homeManager.core
-          inputs.self.modules.homeManager.desktop
           inputs.self.modules.homeManager.terminal
         ];
       };
@@ -43,7 +37,6 @@
       home-manager.users.${config.flake.aspects.owner.username} = {
         imports = [
           inputs.self.modules.homeManager.core
-          inputs.self.modules.homeManager.desktop
           inputs.self.modules.homeManager.terminal
         ];
       };

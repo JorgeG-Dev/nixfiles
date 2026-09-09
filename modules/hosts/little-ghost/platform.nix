@@ -1,17 +1,9 @@
-{
-  inputs,
-  config,
-  lib,
-  modulesPath,
-  ...
-}:
+{ ... }:
 {
   flake.modules.nixos.little-ghost =
     {
       modulesPath,
-      config,
       lib,
-      pkgs,
       ...
     }:
     {

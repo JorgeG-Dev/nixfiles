@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, ... }:
 {
   options.flake.aspects = lib.mkOption {
     type = lib.types.attrsOf (lib.types.attrsOf lib.types.str);

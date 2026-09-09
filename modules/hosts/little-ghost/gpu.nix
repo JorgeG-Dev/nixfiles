@@ -1,4 +1,4 @@
-{ inputs, config, ... }:
+{ ... }:
 {
   flake.modules.nixos.little-ghost = {
     services.xserver.videoDrivers = [ "amdgpu" ];

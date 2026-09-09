@@ -1,11 +1,4 @@
-{
-  self,
-  inputs,
-  config,
-  pkgs,
-  wlib,
-  ...
-}:
+{ self, config, ... }:
 let
   gitModule =
     { pkgs, ... }:

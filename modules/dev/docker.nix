@@ -1,10 +1,4 @@
-{
-  self,
-  inputs,
-  config,
-  pkgs,
-  ...
-}:
+{ config, ... }:
 {
   flake.modules.nixos.dev = { pkgs, ... }: {
     virtualisation.docker = {

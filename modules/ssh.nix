@@ -1,11 +1,11 @@
-{ inputs, config, ... }:
-{
+{ ... }:
+let
   # TODO: Fill out SSH key stuff for both systems
-  flake.modules.nixos.core = {
+  sshModule = {
     services.openssh.enable = false;
   };
-
-  flake.modules.darwin.core = {
-    services.openssh.enable = false;
-  };
+in
+{
+  flake.modules.nixos.core = sshModule;
+  flake.modules.darwin.core = sshModule;
 }

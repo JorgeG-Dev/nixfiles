@@ -1,6 +1,6 @@
-{ inputs, config, ... }:
+{ ... }:
 {
-  flake.modules.nixos.core = {
+  flake.modules.nixos.desktop = {
     services.pulseaudio.enable = false;
     security.rtkit.enable = true;
     services.pipewire = {

@@ -1,11 +1,4 @@
-{
-  self,
-  inputs,
-  config,
-  pkgs,
-  wlib,
-  ...
-}:
+{ self, ... }:
 let
   yaziModule = {
     imports = [ self.wrappers.yazi.install ];

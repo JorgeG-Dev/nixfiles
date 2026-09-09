@@ -1,9 +1,4 @@
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ ... }:
 {
   # Meant to be more of a metadata module, just declaring information about the owner of the system
   flake = {

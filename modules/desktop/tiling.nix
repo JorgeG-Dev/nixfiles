@@ -1,6 +1,5 @@
 {
   self,
-  inputs,
   lib,
   config,
   ...
@@ -89,6 +88,10 @@ in
           }
         ) config.host.monitors.configs;
       };
+
+      # Bound out here because `config` inside the home-manager module below is
+      # the home-manager config, not this one.
+      wallpaperDir = wallpapers.${config.host.wallpapers.set};
     in
     {
       programs.niri = {
@@ -117,8 +120,7 @@ in
               };
               wallpaper = {
                 enabled = true;
-                # TODO: Figure out how to set this value based on monitor type
-                directory = "${config.home.homeDirectory}/${wallpapers.ultrawide}";
+                directory = "${config.home.homeDirectory}/${wallpaperDir}";
                 fill_mode = "crop";
                 transition_duration = 1500;
                 transition_on_startup = true;

@@ -1,4 +1,4 @@
-{ inputs, config, ... }:
+{ ... }:
 {
   # While not necessarily floating related, keep the desktop clean of clutter
   flake.modules.darwin.desktop = {

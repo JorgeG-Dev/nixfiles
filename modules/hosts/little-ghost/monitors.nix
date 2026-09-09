@@ -11,5 +11,7 @@
           refreshRate = "239.999";
         };
       };
+
+      host.wallpapers.set = "ultrawide";
     };
 }

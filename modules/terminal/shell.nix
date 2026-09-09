@@ -1,9 +1,6 @@
 {
   self,
-  inputs,
   config,
-  pkgs,
-  wlib,
   ...
 }:
 {
@@ -28,20 +25,20 @@
       config.runtimePkgs = [ (self.wrappers.starship.wrap { inherit pkgs; }) ];
       imports = [ wlib.wrapperModules.zsh ];
       config.zshrc.content = ''
-                		# History
-                		HISTSIZE=10000
-                		SAVEHIST=10000
-                		setopt HIST_IGNORE_SPACE SHARE_HISTORY
-                		
-                		# Completion
-                		autoload -U compinit && compinit
-        			
-                        # Default editor (temporary till neovim is setup)
-                        export EDITOR=vim
-                		
-                		# Starship
-                		eval "$(starship init zsh)"
-                		'';
+        # History
+        HISTSIZE=10000
+        SAVEHIST=10000
+        setopt HIST_IGNORE_SPACE SHARE_HISTORY
+
+        # Completion
+        autoload -U compinit && compinit
+
+        # Default editor
+        export EDITOR=nvim
+
+        # Starship
+        eval "$(starship init zsh)"
+      '';
     };
 
   flake.modules.nixos.terminal =

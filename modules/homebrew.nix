@@ -1,4 +1,4 @@
-{ inputs, config, ... }:
+{ ... }:
 {
   flake.modules.darwin.core = {
     homebrew = {
