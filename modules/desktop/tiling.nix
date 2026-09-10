@@ -1,14 +1,14 @@
-{
-  lib,
-  config,
-  ...
-}:
+{ config, ... }:
 let
   # Bound at the flake-parts level so the home-manager module below can take its
   # own `config` argument without losing access to the aspect.
   wallpapers = config.flake.aspects.wallpapers;
   owner = config.flake.aspects.owner.username;
   emulator = config.flake.aspects.terminal.emulator;
+
+  # cursor.nix owns these.
+  cursorTheme = config.flake.aspects.cursor.theme;
+  cursorSize = config.flake.aspects.cursor.size;
 in
 {
   flake.modules.nixos.desktop =
@@ -38,13 +38,6 @@ in
       # systemd drop-in that keeps niri-session's imported PATH intact. Only the
       # configuration itself lives in home-manager.
       programs.niri.enable = true;
-
-      services.displayManager.defaultSession = lib.mkForce "niri";
-      services.displayManager.noctalia-greeter = {
-        enable = true;
-      };
-      # TODO: Wait for noctalia-greeter module to be updated to enable the auto-sync feature
-      # Doing it manually is a bit janky.
 
       # wayland.windowManager.niri and programs.noctalia are both Linux-only
       # home-manager modules, so they live here instead of in homeManager.desktop
@@ -91,6 +84,13 @@ in
                 "Super+S".spawn-sh = "noctalia msg panel-toggle control-center";
               };
               input.keyboard.xkb.layout = "us";
+              # Named explicitly rather than leaning on the ~/.icons/default alias
+              # that home.pointerCursor writes, so the compositor asks for the
+              # theme it actually wants instead of resolving one indirectly.
+              cursor = {
+                xcursor-theme = cursorTheme;
+                xcursor-size = cursorSize;
+              };
               spawn-at-startup = [ "noctalia" ];
               layout = {
                 default-column-width = {
