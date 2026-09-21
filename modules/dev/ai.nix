@@ -10,5 +10,8 @@ let
 in
 {
   flake.modules.nixos.dev = aiModule;
-  flake.modules.darwin.dev = aiModule;
+  flake.modules.darwin.dev = {
+    imports = [ aiModule ];
+    homebrew.casks = [ "claude" ];
+  };
 }
