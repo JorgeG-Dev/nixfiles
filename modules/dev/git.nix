@@ -9,6 +9,7 @@ let
         lazygit
         git-filter-repo
         gh
+        tea
       ];
     };
 in
