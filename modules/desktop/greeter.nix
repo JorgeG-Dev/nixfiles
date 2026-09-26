@@ -3,6 +3,7 @@ let
   # Theme name and size come from the cursor aspect so the greeter and the
   # session can't drift apart.
   cursor = config.flake.aspects.cursor;
+  username = config.flake.aspects.owner.username;
 in
 {
   flake.modules.nixos.desktop =
@@ -27,6 +28,8 @@ in
         # cursorTheme covers `theme` and `path` but not `size`, so that one
         # goes through settings directly.
         settings.cursor.size = cursor.size;
+
+        passwordlessSyncUsers = [ username ];
       };
       # TODO: Wait for noctalia-greeter module to be updated to enable the auto-sync feature
       # Doing it manually is a bit janky.
