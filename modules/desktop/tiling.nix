@@ -128,6 +128,24 @@ in
                   recursive = true;
                 };
               };
+              idle = {
+                behavior_order = [
+                  "lock"
+                  "screen_off"
+                ];
+                behavior = {
+                  lock = {
+                    timeout = 300;
+                    action = "lock";
+                    enabled = true;
+                  };
+                  screen_off = {
+                    timeout = 360;
+                    action = "screen_off";
+                    enabled = true;
+                  };
+                };
+              };
               shell = {
                 polkit_agent = true;
               };
