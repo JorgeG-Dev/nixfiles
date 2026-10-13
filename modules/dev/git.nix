@@ -6,9 +6,7 @@ let
     {
       home-manager.users.${owner.username}.imports = [ self.modules.homeManager.dev ];
       environment.systemPackages = with pkgs; [
-        lazygit
         git-filter-repo
-        gh
         tea
       ];
     };
@@ -21,6 +19,12 @@ in
         name = owner.name;
         email = owner.email;
       };
+    };
+    programs.lazygit.enable = true;
+    programs.gh = {
+      enable = true;
+      # Remotes here are SSH, so git has no use for gh as an HTTPS credential helper.
+      gitCredentialHelper.enable = false;
     };
   };
 
