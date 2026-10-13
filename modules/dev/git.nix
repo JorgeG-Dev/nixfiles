@@ -6,7 +6,6 @@ let
     {
       home-manager.users.${owner.username}.imports = [ self.modules.homeManager.dev ];
       environment.systemPackages = with pkgs; [
-        git-filter-repo
         tea
       ];
     };
@@ -20,7 +19,22 @@ in
         email = owner.email;
       };
     };
-    programs.lazygit.enable = true;
+    # Sets git's core.pager and interactive.diffFilter to delta.
+    programs.delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options.navigate = true;
+    };
+    programs.lazygit = {
+      enable = true;
+      # lazygit can't let delta page or probe the terminal background itself.
+      settings.git.diffRenderers = [
+        {
+          colorArg = "always";
+          command = "delta --dark --paging=never";
+        }
+      ];
+    };
     programs.gh = {
       enable = true;
       # Remotes here are SSH, so git has no use for gh as an HTTPS credential helper.
