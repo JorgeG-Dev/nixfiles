@@ -1,10 +1,10 @@
 { self, config, ... }:
 let
+  owner = config.flake.aspects.owner;
   gitModule =
     { pkgs, ... }:
     {
-      imports = [ self.wrappers.git.install ];
-      wrappers.git.enable = true;
+      home-manager.users.${owner.username}.imports = [ self.modules.homeManager.dev ];
       environment.systemPackages = with pkgs; [
         lazygit
         git-filter-repo
@@ -14,17 +14,15 @@ let
     };
 in
 {
-  flake.wrappers.git =
-    { pkgs, wlib, ... }:
-    {
-      imports = [ wlib.wrapperModules.git ];
-      settings = {
-        user = {
-          name = config.flake.aspects.owner.name;
-          email = config.flake.aspects.owner.email;
-        };
+  flake.modules.homeManager.dev = {
+    programs.git = {
+      enable = true;
+      settings.user = {
+        name = owner.name;
+        email = owner.email;
       };
     };
+  };
 
   flake.modules.nixos.dev = gitModule;
   flake.modules.darwin.dev = gitModule;
